@@ -13,12 +13,13 @@ L.tileLayer(('https://api.mapbox.com/styles/v1/connord/ciy3qjp5800012spckvsivlx8
 var states;
 var airportTowers;
 
+// set color definitions and style for states layer
 function setColor(count) {
-    return count > 59 ? '#124345' :
-           count > 26 ? '#237061' :
-           count > 15 ? '#4C9F70' :
-           count >  8 ? '#8BCD75' :
-                        '#DCF875';
+    return count > 59 ? '#810f7c' :
+           count > 26 ? '#8856a7' :
+           count > 15 ? '#8c96c6' :
+           count >  8 ? '#b3cde3' :
+                        '#edf8fb';
 }
 
 function style(feature) {
@@ -32,6 +33,7 @@ function style(feature) {
     };
 }
 
+// draw states layer
 $.getJSON("./assets/us-states.geojson",function(data){
     // set airportTowers to the dataset, and add the cell towers GeoJSON layer to the map
     states = L.geoJson(data,{
@@ -42,26 +44,38 @@ $.getJSON("./assets/us-states.geojson",function(data){
     }).addTo(map);
 });
 
-var airportWithTowerIcon = L.icon({
-    iconUrl: "./img/airport1.png",
-    shadowUrl: "./img/airport_sd.png",
-    iconSize: [18, 18],
-    shadowSize: [25, 18],
-    iconAnchor: [16, 16],
-    shadowAnchor: [16, 16],
-    popupAnchor: [-8, -18]
-});
 
-var airportNoTowerIcon = L.icon({
-    iconUrl: "./img/airport2.png",
-    shadowUrl: "./img/airport_sd.png",
-    iconSize: [18, 18],
-    shadowSize: [25, 18],
-    iconAnchor: [16, 16],
-    shadowAnchor: [16, 16],
-    popupAnchor: [-8, -18]
-});
+// set style for airport tower marker, dependent on having a tower and zoom level
+function getAirportIcon(hasTower, zoomLevel) {
+    var airportNoTowerIcon = L.icon({
+        iconUrl: "./img/airplane-red.svg",
+        //shadowUrl: "./img/airport.png",
+        iconSize: [zoomLevel, zoomLevel],
+        //shadowSize: [25, 18],
+        iconAnchor: [16, 16],
+        shadowAnchor: [16, 16],
+        popupAnchor: [-8, -18]
+    });
 
+    var airportWithTowerIcon = L.icon({
+        iconUrl: "./img/airplane-blue.svg",
+        //shadowUrl: "./img/airport_sd.png",
+        iconSize: [zoomLevel, zoomLevel],
+        //shadowSize: [25, 18],
+        iconAnchor: [16, 16],
+        shadowAnchor: [16, 16],
+        popupAnchor: [-8, -18]
+    });
+
+    if (hasTower == "y") {
+        return airportWithTowerIcon;
+    }
+    else {
+        return airportNoTowerIcon;
+    }
+}
+
+// draw airport marker layer
 $.getJSON("./assets/airports.geojson",function(data){
     // set airportTowers to the dataset, and add the cell towers GeoJSON layer to the map
     airportTowers = L.geoJson(data,{
@@ -69,11 +83,12 @@ $.getJSON("./assets/airports.geojson",function(data){
             layer.bindPopup(feature.properties.AIRPT_NAME);
         },
         pointToLayer: function (feature, latlng) {
+            var zoomLevel = map.getZoom();
             if (feature.properties.CNTL_TWR == 'Y') {
-                return L.marker(latlng, {icon: airportWithTowerIcon});
+                return L.marker(latlng, {icon: getAirportIcon("y", zoomLevel)});
             }
             else if (feature.properties.CNTL_TWR == 'N') {
-                return L.marker(latlng, {icon: airportNoTowerIcon});
+                return L.marker(latlng, {icon: getAirportIcon("n", zoomLevel)});
             }
         }
     }).addTo(map);
@@ -85,15 +100,15 @@ var legend = L.control({position: 'topright'});
 legend.onAdd = function(){
     var div = L.DomUtil.create('div', 'legend');
     div.innerHTML += '<b>Airports</b><br />';
-    div.innerHTML += '<img src="./img/airport1.png" width="16" height="16"><p style="display:inline">  Has Control Tower</p><br />';
-    div.innerHTML += '<img src="./img/airport2.png" width="16" height="16"><p style="display:inline">  No Control Tower</p>';
+    div.innerHTML += '<img src="./img/airplane-blue.svg" width="16" height="16"><p style="display:inline">  Has Control Tower</p><br />';
+    div.innerHTML += '<img src="./img/airplane-red.svg" width="16" height="16"><p style="display:inline">  No Control Tower</p>';
     div.innerHTML += '<hr />';
     div.innerHTML += '<b># of Airports</b> <br />';
-    div.innerHTML += '<i style="background: #DCF875;"></i><p>1 - 7</p>';
-    div.innerHTML += '<i style="background: #8BCD75;"></i><p>8 - 14</p>';
-    div.innerHTML += '<i style="background: #4C9F70;"></i><p>15 - 25</p>';
-    div.innerHTML += '<i style="background: #237061;"></i><p>26 - 59</p>';
-    div.innerHTML += '<i style="background: #124345;"></i><p>59+</p>';
+    div.innerHTML += '<i style="background: #edf8fb;"></i><p>1 - 7</p>';
+    div.innerHTML += '<i style="background: #b3cde3;"></i><p>8 - 14</p>';
+    div.innerHTML += '<i style="background: #8c96c6;"></i><p>15 - 25</p>';
+    div.innerHTML += '<i style="background: #8856a7;"></i><p>26 - 59</p>';
+    div.innerHTML += '<i style="background: #810f7c;"></i><p>59+</p>';
 
     return div;
 }
