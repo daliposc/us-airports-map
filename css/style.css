@@ -5,6 +5,7 @@ body {
 #map {
     height: 700px;
     width: 100%;
+    margin: auto;
 }
 
 #wrapper {
@@ -57,10 +58,11 @@ p {
 }
 
 .search-container{
-    width: 500px;
+    width: 400px;
     vertical-align: middle;
     white-space: nowrap;
     position: relative;
+    margin: auto;
 }
 
 .search-container input#search{

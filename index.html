@@ -10,7 +10,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 <body>
-    <h1>Major Airports of the United States</h1>
+    <h1 >Major Airports of the United States</h1>
 
     <div class="box">
         <div class="search-container">
@@ -22,7 +22,22 @@
 
     <div id ="map"></div>
 
-    <p style="text-align:center">By: Connor Daliposon | Geog 371 Web Mapping | Winter 2017</p>
+    <p style="text-align:center">Connor Daliposon | Geog 371 Web Mapping | Winter 2017</p>
+
+    <script>
+        // Resize map div with wind0w height
+        function resizeMapDiv() {
+            var viewport_height = $(window).height();
+            $('#map').css({'height': (viewport_height-200) + 'px'});
+        }
+
+        $(document).ready(function() {
+            resizeMapDiv();
+            window.onresize = function(e) {
+                resizeMapDiv();
+            }
+        });
+    </script>
 
     <script src ="js/map.js"></script>
 </body>

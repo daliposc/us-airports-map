@@ -4,12 +4,12 @@ map.js:
     - Draw US States layer onto map
     - Draw Airports layer onto map
     - Draw map elements (Legend & Scale)
-    - Add search functionalisty
+    - Add search functionality
 **/
 
 /** Add a leaflet window with a basemap**/
 // initialize map object
-var map = L.map('map', {center: [44.2356202,-96.9467764], zoom: 4});
+var map = L.map('map', {center: [40.111688,-97.77832], zoom: 4});
 
 // add basemap to leaflet map object
 L.tileLayer(('https://api.mapbox.com/styles/v1/connord/ciy3qjp5800012spckvsivlx8/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY29ubm9yZCIsImEiOiJjaXIya3VjYXgwMDA4ZnBubWMwbGM4aW4yIn0.OmX2i2_gUHm12VynRff6qA'),
