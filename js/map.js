@@ -1,7 +1,13 @@
 /**
- * Created by daliposc on 1/26/2017.
- */
+map.js:
+    - Add Leaflet window w/ Basemap
+    - Draw US States layer onto map
+    - Draw Airports layer onto map
+    - Draw map elements (Legend & Scale)
+    - Add search functionalisty
+**/
 
+/** Add a leaflet window with a basemap**/
 // initialize map object
 var map = L.map('map', {center: [44.2356202,-96.9467764], zoom: 4});
 
@@ -9,15 +15,17 @@ var map = L.map('map', {center: [44.2356202,-96.9467764], zoom: 4});
 L.tileLayer(('https://api.mapbox.com/styles/v1/connord/ciy3qjp5800012spckvsivlx8/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY29ubm9yZCIsImEiOiJjaXIya3VjYXgwMDA4ZnBubWMwbGM4aW4yIn0.OmX2i2_gUHm12VynRff6qA'),
     {maxZoom: 12, minZoom: 3, attribution: 'Mapbox &copy | OpenStreetMaps &copy'}).addTo(map);
 
-// initialize map layers
+
+/** Initialize global variables **/
+// map layers + arrays w/ airport names and correpondant latlng for searching
 var states;
 var airportTowers;
-
-//initialize search arrays
 var nameIndex = [];
 var latlngIndex =[];
 
-// set color definitions and style for states layer
+
+/** Styling, then adding the States Cloropleth **/
+// define cloropleth color ramp breaks
 function setColor(count) {
     return count > 59 ? '#810f7c' :
            count > 26 ? '#8856a7' :
@@ -25,7 +33,7 @@ function setColor(count) {
            count >  8 ? '#b3cde3' :
                         '#edf8fb';
 }
-
+// set the style of a single state feature
 function style(feature) {
     return {
         fillColor: setColor(feature.properties.count),
@@ -36,10 +44,9 @@ function style(feature) {
         dashArray: '4'
     };
 }
-
-// draw states layer
+// draw states geoJson layer
 $.getJSON("./assets/us-states.geojson",function(data){
-    // set airportTowers to the dataset, and add the cell towers GeoJSON layer to the map
+    // geoJson object
     states = L.geoJson(data,{
         onEachFeature: function (feature, layer) {
             layer.bindPopup(feature.properties.name + ": " + feature.properties.count + " airports");
@@ -48,8 +55,8 @@ $.getJSON("./assets/us-states.geojson",function(data){
     }).addTo(map);
 });
 
-
-// set style for airport tower marker, dependent on having a tower and zoom level
+/** Style and add airports point payer **/
+// Sets the style of airport marker icons, sizes them based on zoomLevel 
 function getAirportIcon(hasTower, zoomLevel) {
     var airportNoTowerIcon = L.icon({
         iconUrl: "./img/airplane-red.svg",
@@ -64,8 +71,8 @@ function getAirportIcon(hasTower, zoomLevel) {
         iconSize: [zoomLevel*2, zoomLevel*2],
         iconAnchor: [zoomLevel*2, zoomLevel*2],
         popupAnchor: [0, 0]
-    });
-
+    })
+    
     if (hasTower == "y") {
         return airportWithTowerIcon;
     }
@@ -73,7 +80,6 @@ function getAirportIcon(hasTower, zoomLevel) {
         return airportNoTowerIcon;
     }
 }
-
 // draw airport marker layer
 $.getJSON("./assets/airports.geojson",function(data){
     // set airportTowers to the dataset, and add the cell towers GeoJSON layer to the map
@@ -98,7 +104,6 @@ $.getJSON("./assets/airports.geojson",function(data){
     }).addTo(map);
 
 });
-
 // change icon size on zoom by setting a new icon based on the old and updating
 map.on('zoomend', function() {
     airportTowers.eachLayer( function(marker) {
@@ -109,7 +114,8 @@ map.on('zoomend', function() {
     });
 });
 
-//add and style a Legend
+/**Adding Map Elements (Legend and Scale)**/
+// create legend control and style it with html/css
 var legend = L.control({position: 'topright'});
 
 legend.onAdd = function(){
@@ -135,11 +141,14 @@ legend.addTo(map);
 // add scale bar to map
 L.control.scale({position: 'bottomleft'}).addTo(map);
 
-//search by airport abbreviation and zoom to point
+/** Search Functionality **/
+//search by airport abbreviation and zoom to that point
 $(document).ready(function(){
-    //search button press
+    //on button press
     $("button").click(function(){
+        //get text from the search box input
         var searchText = $("input:text").val();
+        //check if that airport abbrv exists; if so: zoom to it and show a popup, else: tell the user
         if (nameIndex.indexOf(searchText.toUpperCase()) != -1) {
             map.setView(latlngIndex[nameIndex.indexOf(searchText.toUpperCase())], 7);
 
@@ -155,7 +164,7 @@ $(document).ready(function(){
         }
     });
 
-    //pressing enter clicks the button
+    //Call a button click function when 'Enter' key is pressed
     $("#search").keypress(function (e) {
         if (e.which == 13) {
             $("button").click();
