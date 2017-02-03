@@ -10,8 +10,19 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 <body>
+    <h1>Major Airports of the United States</h1>
+
+    <div class="box">
+        <div class="search-container">
+            <input id="search" type="text" name="air_abbrv" placeholder="Airport Abbreviation (ex. LAX)...">
+            <button class="icon"><img src="img/search.svg" height="25" width="25"/></button>
+            <p style="display:inline; color:#ff443a" id="notfound"></p>
+        </div>
+    </div>
 
     <div id ="map"></div>
+
+    <p style="text-align:center">By: Connor Daliposon | Geog 371 Web Mapping | Winter 2017</p>
 
     <script src ="js/map.js"></script>
 </body>

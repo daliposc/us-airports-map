@@ -1,20 +1,23 @@
+body {
+    background-color: #191818;
+}
+
 #map {
-    height: 800px;
+    height: 700px;
     width: 100%;
 }
 
 #wrapper {
-    width: 75%;
+    width: 90%;
 }
 
 .legend {
     line-height: 16px;
     width: 130px;
-    color: #333333;
-    font-family: 'Rubik', Helvetica, sans-serif;
+    color: #f4f4f4;
+    font-family: 'Rubik', 'Helvetica', sans-serif;
     padding: 6px 8px;
-    background: white;
-    background: rgba(255,255,255,0.3);
+    background: rgba(25,24,24,0.9);
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     border-radius: 5px;
 }
@@ -24,4 +27,82 @@
     height: 16px;
     float: left;
     margin-right: 8px;
+}
+
+.legend b {
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.legend img {
+    margin-right: 8px;
+}
+
+h1 {
+    font-family: 'Rubik', 'Helvetica', sans-serif;
+    font-weight: 500;
+    color: #f4f4f4;
+    text-align: center;
+}
+
+p {
+    font-family: 'Rubik', 'Helvetica', sans-serif;
+    color: #f4f4f4;
+}
+
+.box{
+    margin: 20px auto;
+    width: 500px;
+    height: 50px;
+}
+
+.search-container{
+    width: 500px;
+    vertical-align: middle;
+    white-space: nowrap;
+    position: relative;
+}
+
+.search-container input#search{
+    width: 300px;
+    height: 50px;
+    background: #444;
+    border: none;
+    font-size: 14pt;
+    float: left;
+    color: #f4f4f4;
+    padding-left: 45px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+
+
+    -webkit-transition: background .55s ease;
+    -moz-transition: background .55s ease;
+    -ms-transition: background .55s ease;
+    -o-transition: background .55s ease;
+    transition: background .55s ease;
+}
+
+.search-container button.icon{
+    -webkit-border-top-right-radius: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+    -moz-border-radius-topright: 5px;
+    -moz-border-radius-bottomright: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+
+    border: none;
+    background: #646464;
+    height: 50px;
+    width: 50px;
+    opacity: 1;
+    font-size: 10pt;
+}
+.search-container button.icon:hover{
+    background: white;
+}
+
+.search-container button.icon:active{
+    background: #e1e1e1;
 }
